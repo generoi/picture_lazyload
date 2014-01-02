@@ -1,7 +1,6 @@
 (function($) {
   Drupal.behaviors.pictureLazyload = {
     attach: function(context, settings) {
-      console.log('fo');
       // Ensure we always pass a raw DOM element to picture fill, otherwise it
       // will fallback to the document scope and maybe handle to much.
       $('.picture', context).once('picture-lazyload').waypoint(function() {
