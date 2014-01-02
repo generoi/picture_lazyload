@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Implements hook_library_alter().
+ */
+function picture_lazyload_library_alter(&$libraries, $module) {
+  if ($module == 'picture' && isset($libraries['picture.ajax'])) {
+    // Override default JS to use lazy loaded logic instead
+    $libraries['picture.ajax']['js'] = array(
+      drupal_get_path('module', 'picture_lazyload') . '/picture_lazyload.js' => array(
+        'type' => 'file',
+        'weight' => -10,
+        'group' => JS_DEFAULT,
+        'scope' => 'footer',
+        'need_jquery' => TRUE,
+      ),
+    );
+    $libraries['picture.ajax']['css'] = array(
+      drupal_get_path('module', 'picture_lazyload') . '/picture_lazyload.css' => array(
+        'type' => 'file',
+      ),
+    );
+    $libraries['picture.ajax']['dependencies'] = array(
+      array('waypoints', 'waypoints')
+    );
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function picture_lazyload_theme_registry_alter(&$theme_registry) {
+  $theme_registry['picture']['theme path'] = drupal_get_path('module', 'picture_lazyload');
+  $theme_registry['picture']['function'] = 'picture_lazyload_picture';
+}
+
+/**
+ * Override theme_picture().
+ */
+function picture_lazyload_picture(&$variables) {
+  $output = theme_picture($variables);
+  // Replace the triggering data-picture attribute and instead add a triggering
+  // lazyload-picture class.
+  $output = preg_replace('/ data-picture(="")?/', ' class="picture"', $output);
+  return $output;
+}
