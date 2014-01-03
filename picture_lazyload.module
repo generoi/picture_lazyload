@@ -15,11 +15,6 @@ function picture_lazyload_library_alter(&$libraries, $module) {
         'need_jquery' => TRUE,
       ),
     );
-    $libraries['picture.ajax']['css'] = array(
-      drupal_get_path('module', 'picture_lazyload') . '/picture_lazyload.css' => array(
-        'type' => 'file',
-      ),
-    );
     $libraries['picture.ajax']['dependencies'] = array(
       array('waypoints', 'waypoints')
     );
@@ -41,6 +36,6 @@ function picture_lazyload_picture(&$variables) {
   $output = theme_picture($variables);
   // Replace the triggering data-picture attribute and instead add a triggering
   // lazyload-picture class.
-  $output = preg_replace('/ data-picture(="")?/', ' class="picture"', $output);
+  $output = preg_replace('/ data-picture(="")?/', ' class="picture spinner"', $output);
   return $output;
 }
