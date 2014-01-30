@@ -3,11 +3,14 @@
   // Simple lazy load function which triggers the picture load.
   jQuery.fn.lazyLoad = function() {
     this.each(function() {
-      var parent = $(this)
+      var $this = $(this)
         .attr('data-picture', '') // Set the data-picture property on the picture
-        .removeClass('spinner')
-        .parent()[0]; // Select the parent as picturefill traverses DOM children.
-      window.picturefill(parent);
+        .removeClass('spinner');
+      window.picturefill($this.parent()[0]);
+
+      // Add a class once the image has loaded so we can modify styles.
+      function setLoaded() { $this.addClass('img-loaded'); }
+      $this.find('img').on('load', setLoaded);
     });
     return this;
   };
@@ -27,7 +30,7 @@
         .not('.lazyload-manual') // Dont load pictures tagged with manual loading.
         .once('picture-lazyload')
         .waypoint(function () { $(this).lazyLoad(); }, {
-          offset: '100%', triggerOnce: true
+          offset: '90%', triggerOnce: true
         });
 
       if (context === '#cboxLoadedContent') {
