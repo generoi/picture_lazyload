@@ -1,17 +1,24 @@
 (function($) {
 
   // Simple lazy load function which triggers the picture load.
-  jQuery.fn.lazyLoad = function() {
-    this.each(function() {
-      var $this = $(this)
-        .attr('data-picture', '') // Set the data-picture property on the picture
-        .removeClass('spinner');
-      window.picturefill($this.parent()[0]);
+  jQuery.fn.lazyLoad = function(callback) {
+    var imageLoaded = 0
+      , imageCount = this.size();
 
-      // Add a class once the image has loaded so we can modify styles.
-      function setLoaded() { $this.addClass('img-loaded'); }
-      $this.find('img').on('load', setLoaded);
-    });
+    this.attr('data-picture', '')
+      .removeClass('spinner')
+      .each(function() {
+        var $this = $(this);
+        window.picturefill($this.parent()[0]);
+
+        // Add a class once the image has loaded so we can modify styles.
+        function setLoaded() {
+          $this.addClass('img-loaded');
+          // Run the callback once all images have loaded
+          if (++imageLoaded === imageCount && callback) callback();
+        }
+        $this.find('img').on('load', setLoaded);
+      });
     return this;
   };
 
@@ -29,6 +36,11 @@
       $('.picture', context)
         .not('.lazyload-manual') // Dont load pictures tagged with manual loading.
         .once('picture-lazyload')
+        // Load images tagged with no lazyload instantly.
+        .filter('.skip-lazyload')
+          .lazyLoad()
+          .end()
+        .not('.skip-lazyload')
         .waypoint(function () { $(this).lazyLoad(); }, {
           offset: '90%', triggerOnce: true
         });
@@ -50,12 +62,15 @@
         , slider = $slider.data('flexslider');
 
       $slider
-        .find('.picture')
+        .find('.slides > li:not(.clone) .picture')
         .once('picture-lazyload')
-        .lazyLoad();
-
-      // Rebuild the slider.
-      slider.setup();
+        // Rebuild the slider once all images are loaded to make sure the
+        // height is correct
+        .lazyLoad(function() {
+          // Flexslider triggers the resize function on window focus, force it
+          // so the height is correct.
+          $(window).trigger('focus');
+        });
 
       // Add .colorbox-iframe links which works like .colorbox-load but with
       // preconfigured values. This needs to run after the flexslider has been

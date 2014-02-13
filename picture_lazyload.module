@@ -36,6 +36,6 @@ function picture_lazyload_picture(&$variables) {
   $output = theme_picture($variables);
   // Replace the triggering data-picture attribute and instead add a triggering
   // lazyload-picture class.
-  $output = preg_replace('/ data-picture(="")?/', ' class="picture spinner"', $output);
+  $output = preg_replace('/ data-picture(="")?/', ' class="picture spinner skip-lazyload"', $output);
   return $output;
 }
