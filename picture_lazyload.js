@@ -54,6 +54,17 @@
     }
   };
 
+  // Provide integration with bean_instagram.
+  Drupal.bean_instagram = Drupal.bean_instagram || {};
+  Drupal.bean_instagram.after = function() {
+    $('.bean-instagram-wrapper .picture')
+      .not('.lazyload-manual')
+      .once('picture-lazyload')
+      .waypoint(function () { $(this).lazyLoad(); }, {
+        offset: '90%', triggerOnce: true
+      });
+  };
+
   Drupal.pictureLazyload = Drupal.pictureLazyload || {};
 
   Drupal.pictureLazyload.flexslider = {
