@@ -69,14 +69,17 @@
   Drupal.pictureLazyload.flexslider = {
     start: function(e) {
       var $slider = $(e.target)
-        , slider = $slider.data('flexslider');
+        , slider = $slider.data('flexslider')
+        , $parent = $slider.parent();
 
       $slider
+        .detach()
         .find('.slides > li:not(.clone) .picture')
         .once('picture-lazyload')
         // Rebuild the slider once all images are loaded to make sure the
         // height is correct
         .lazyLoad(function() {
+          $slider.appendTo($parent);
           // Flexslider triggers the resize function on window focus, force it
           // so the height is correct.
           $(window).trigger('focus');
