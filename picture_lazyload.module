@@ -35,7 +35,8 @@ function picture_lazyload_theme_registry_alter(&$theme_registry) {
 function picture_lazyload_picture(&$variables) {
   $output = theme_picture($variables);
   // Replace the triggering data-picture attribute and instead add a triggering
-  // lazyload-picture class.
-  $output = preg_replace('/ data-picture(="")?/', ' class="picture spinner skip-lazyload"', $output);
+  // .picture class. By default we do not lazyload, but anything which needs
+  // lazy loading should not use this class. @TODO configurable.
+  $output = preg_replace('/ data-picture(="")?/', ' class="picture skip-lazyload"', $output);
   return $output;
 }

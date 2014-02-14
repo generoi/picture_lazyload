@@ -6,7 +6,6 @@
       , imageCount = this.size();
 
     this.attr('data-picture', '')
-      .removeClass('spinner')
       .each(function() {
         var $this = $(this);
         window.picturefill($this.parent()[0]);
