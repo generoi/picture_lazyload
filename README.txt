@@ -1,4 +1,4 @@
 Picture lazyload
 ================
 
-TODO: write some documentation.
+TODO: Under development

@@ -4,4 +4,3 @@ dependencies[] = waypoints
 dependencies[] = picture
 package = custom
 core = 7.x
-files[] = tests/picture_lazyload.test
