@@ -79,6 +79,8 @@
         , slider = $slider.data('flexslider')
         , $parent = $slider.parent();
 
+      console.debug('lazyload flexslider: init');
+
       $slider
         .detach()
         .find('.slides > li:not(.clone) .picture')
@@ -87,7 +89,7 @@
         // height is correct
         .lazyLoad(function() {
           $slider.appendTo($parent);
-          console.debug('lazyload complete: resize flexslider');
+          console.debug('lazyload flexslider: complete -> resize');
           // Flexslider triggers the resize function on window focus/resize,
           // force it so the height is correct.
           $(window).trigger('focus');
