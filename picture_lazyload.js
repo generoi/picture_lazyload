@@ -1,9 +1,16 @@
 (function($) {
 
+  var REQUEST_TIMEOUT = 3000;
+
   // Simple lazy load function which triggers the picture load.
   jQuery.fn.lazyLoad = function(callback) {
     var imageLoaded = 0
       , imageCount = this.size();
+
+    setTimeout(function() {
+      console.assert(imageLoaded === imageCount, 'Lazyloaded all images');
+      if (callback) callback();
+    }, REQUEST_TIMEOUT);
 
     this.attr('data-picture', '')
       .each(function() {
@@ -80,9 +87,11 @@
         // height is correct
         .lazyLoad(function() {
           $slider.appendTo($parent);
-          // Flexslider triggers the resize function on window focus, force it
-          // so the height is correct.
+          console.debug('lazyload complete: resize flexslider');
+          // Flexslider triggers the resize function on window focus/resize,
+          // force it so the height is correct.
           $(window).trigger('focus');
+          $(window).trigger('resize');
         });
 
       // Add .colorbox-iframe links which works like .colorbox-load but with
